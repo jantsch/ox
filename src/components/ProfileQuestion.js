@@ -3,20 +3,19 @@ import {View,Text,TouchableOpacity } from 'react-native';
 import AppIntro from 'react-native-app-intro';
 import { Actions } from 'react-native-router-flux'
 import { Slider } from 'react-native-elements'
-
+import { onOxalatesInputChange,submitProfile } from './../actions'
+import { connect} from 'react-redux'
 
 class ProfileQuestion extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: 40
-    };
+ 
+  onOxalatesChange(newValue){   
+    this.props.onOxalatesInputChange(newValue)    
   }
   render() {  
     return (
       <View style={styles.slide}>
         <View style={styles.upperContainer}>
-            <Text style={styles.text} > What is the daily ammount of oxalates allowed?</Text>
+            <Text style={styles.text} > What is the daily amount of oxalates allowed?</Text>
             <View style={styles.picker}>
               <Slider
                 minimumValue={0}
@@ -26,9 +25,9 @@ class ProfileQuestion extends Component {
                 maximumTrackTintColor={'#b3b3b3'}
                 thumbTintColor={'#fff'}
                 animateTransitions= {true}
-                value={this.state.value}
-                onValueChange={(value) => this.setState({value})} />
-              <Text style={styles.currentValue}>{this.state.value} mg</Text>
+                value={ this.props.oxalates_limit}
+                onValueChange={(value) => this.props.onOxalatesInputChange(value)} />
+              <Text style={styles.currentValue}>{ this.props.oxalates_limit} mg</Text>
             </View>
         </View>
         <View style={styles.bottomContainer}>
@@ -39,7 +38,7 @@ class ProfileQuestion extends Component {
             </View>
             <View style={styles.btnContainer}>
                 <TouchableOpacity style={styles.full}
-                  onPress={ ()=> Actions.TabBar() }
+                  onPress={ ()=> this.props.submitProfile( this.props.oxalates_limit) }
                 >
                  <Text style={styles.nextButtonText}>Done
                  </Text>
@@ -128,5 +127,9 @@ const styles = {
 
 };
 
+const mapStateToProps = (state) =>{
+  const  { oxalates_limit } = state.profile
+  return { oxalates_limit }
+}
 
-export default ProfileQuestion
+export default connect(mapStateToProps,{onOxalatesInputChange,submitProfile}) (ProfileQuestion)

@@ -16,8 +16,7 @@ class SocialLogin extends Component{
 
 	onButtonPress(provider){
 		console.log(provider);	
-		//this.props.loginWithProvider(provider)
-		Actions.ProfileQuestion()			
+		this.props.loginWithProvider(provider)		
 	}
 	renderButtons(){
 		const {	

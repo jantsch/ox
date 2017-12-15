@@ -12,7 +12,7 @@ import { connect} from 'react-redux'
 
 
 
-class Search extends Component{	
+class Diary extends Component{	
 
 	render(){
 				
@@ -29,4 +29,4 @@ class Search extends Component{
 
 
 
-export default  Search
+export default  Diary

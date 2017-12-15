@@ -23,19 +23,6 @@ export const onInputChange = ({prop,value})=>{
 	}
 }
 
-export const checkLoginUser = () =>{
-
-	//AsyncStorage.removeItem('token')
-	return (dispatch) =>{
-
-		AsyncStorage.getItem('token').then((token)=>{				
-				if(token)
-					dispatch({type: CHECK_USER_SUCCESS,	payload: {token}})		
-				else
-					dispatch({type: CHECK_USER_FAIL})
-		})
-	}
-}
 
 export const loginUser = ({email,password})=>{
 
@@ -66,9 +53,10 @@ export const loginUser = ({email,password})=>{
 }
 
 const loginSuccess = (dispatch, token) =>{
-	//AsyncStorage.setItem('token',token)
+	AsyncStorage.setItem('token',token)
+	axios.defaults.headers.common['Authorization'] = token;
 	dispatch({type: LOGIN_USER_SUCCESS,	payload: {token}})
-	Actions.TabBar({type: 'reset'})
+	Actions.ProfileQuestion({type: 'reset'})
 
 }
 const registerUser = (dispatch,email,password)=>{
@@ -91,14 +79,14 @@ const registerUser = (dispatch,email,password)=>{
 
 
 export const loginWithProvider = (provider) => async dispatch =>{
-		
+						
 		SocialLoginAPI(provider)
-		.then(info=>{console.log(info);registerUserWithProvider(dispatch,provider,info)})
-		.catch(error=>{console.log(error)})
+		.then(info=>{console.log(info);	registerUserWithProvider(dispatch,provider,info)})
+		.catch(error=>{console.log(error);console.log("CHEGUEI AQUI 2");	})
 }
 
 const registerUserWithProvider = (dispatch,provider,info)=>{
-
+		console.log(Secrets.SERVER_URL +'/api/auth/registerWithProvider');
 		dispatch({type: LOGIN_USER})		
 		axios.post(Secrets.SERVER_URL +'/api/auth/registerWithProvider', {
 		   		provider: provider,
@@ -107,15 +95,16 @@ const registerUserWithProvider = (dispatch,provider,info)=>{
 		   		email:info.user.email,
 		   		name: info.user.name
 		})
-		.then((response)=> {	
-				  
+		.then((response)=> {
+		
+			
 			   let active_token = response.data.token
 			   console.log(active_token);
 			   loginSuccess(dispatch,active_token)
 		})
 		.catch((error)=> {
 		  		// Register Fail 		  		
-		  		//dispatch({type: LOGIN_USER_FAIL, payload: {error: 'Error to Login/Register'}})
+		  		dispatch({type: LOGIN_USER_FAIL, payload: {error: 'Error to Login/Register'}})
 		    	console.log(error);
 		  	});		
 }

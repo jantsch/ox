@@ -12,7 +12,7 @@ class App extends  Component{
 
   render(){
     const store = createStore(reducers,compose(applyMiddleware(ReduxThunk),autoRehydrate()))
-    persistStore(store,{storage: AsyncStorage,whitelist:['myJobs']})
+    persistStore(store,{storage: AsyncStorage})
     return (
       <Provider store={store}>
         <Router />    

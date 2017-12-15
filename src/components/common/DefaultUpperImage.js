@@ -19,7 +19,7 @@ const  DeafultUpperImage = () =>{
 				    style={{width: 75, height: 75}}
 				    source={require('./../../../img/logo.png')} 
 				/>
-			 	<Text style={textStyle}>JobTracker</Text>
+			 	<Text style={textStyle}>OxalatesApp</Text>
 			</View>
 	)
 }

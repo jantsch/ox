@@ -3,14 +3,15 @@ import {Scene,Router,Actions} from 'react-native-router-flux'
 import {View,Text,Image} from 'react-native'
 import _ from 'lodash'
 import Search from './components/Search'
-import History from './components/History'
+import Diary from './components/Diary'
 import SocialLogin from './components/SocialLogin'
 import IntroScreen from './components/Intro'
 import ProfileQuestion from './components/ProfileQuestion'
+import Item from './components/Item'
 import { connect} from 'react-redux'
-import { checkLoginUser} from './actions'
 import {LoadingScreen} from './components/common'
 import SplashScreen from 'react-native-splash-screen'
+import axios from 'axios'
 
 // Simple component to render something in place of icon
 const TabView = ({ selected, title }) => {
@@ -27,11 +28,11 @@ const TabView = ({ selected, title }) => {
 			  		  	source={require('./../img/search.png')}  
 	  				/>
 	  			)
-	  		case 'History':
+	  		case 'Diary':
 	  			return (
 			  		<Image  
 			  		  	style={imageStyle}   
-			  		  	source={require('./../img/history.png')}  
+			  		  	source={require('./../img/diary.png')}  
 	  				/>
 	  			)	  		
 	  	}
@@ -41,7 +42,7 @@ const TabView = ({ selected, title }) => {
   return (
   	<View>
   		{this.tabIcon()}	  	
-	    <Text style={{color: selected ? '#7D192D' :'white'}}>
+	    <Text style={{color: selected ? '#55ace0' :'black'}}>
 	    	{title}
 	    </Text>
     </View>
@@ -51,56 +52,58 @@ const TabView = ({ selected, title }) => {
 
 class RouterComponent extends Component{
 
-	componentWillMount(){
-		this.props.checkLoginUser()
-	}
-
 	render(){	
-		 if (_.isNull(this.props.token)) {	
-		 	SplashScreen.hide() 	
+		 const {storeRecoveryCompleted,token,profile_submited } = this.props
+		 if (storeRecoveryCompleted==false) {	
+		 	
+		 	debugger;
+		 	SplashScreen.hide() 
 		    return (
 		        <LoadingScreen />
 		    )
 		 }
 		 else{
+		 	axios.defaults.headers.common['Authorization'] = token;
 			const {navBar,tabBarStyle, titleNavBarStyle } = styles			
 			return (
-				<Router navigationBarStyle={navBar} titleStyle={titleNavBarStyle} >	
+				<Router navigationBarStyle={navBar} titleStyle={titleNavBarStyle}  >	
 					<Scene key="root">		
 						<Scene key="auth">	
 							<Scene 
 								key="IntroScreen"
 								component={IntroScreen}								
 								hideNavBar={true}
-								initial={!this.props.token}								
+								initial={!token}								
 							/>							
 							<Scene 
 								key="SocialLogin"
 								component={SocialLogin}								
-								hideNavBar={true}														
+								hideNavBar={true} 												
 							/>		
 							<Scene 
 								key="ProfileQuestion"
 								component={ProfileQuestion}								
-								hideNavBar={true}
+								hideNavBar={true} 
+								initial={token && !profile_submited }	
 
 																							
 							/>						
 						</Scene>
-						<Scene key="TabBar" tabs={true} hideNavBar tabBarStyle={tabBarStyle} initial={this.props.token}	>
+						<Scene key="TabBar"  tabs={true}  tabBarStyle={tabBarStyle}  initial={token && profile_submited}>
 						    <Scene 
 							    key="Search" 
 							    title="Search" 
-							    icon={TabView} 	
+							    icon={TabView} 							  	
 	           				>
-		                        <Scene key="SearchScreen"  title="OxalatesApp"  initial component={Search}/>
+		                       <Scene key="SearchScreen"  title="OxalatesApp"  initial component={Search}/>
+		                       <Scene key="ItemScreen"  title="Add Food"   component={Item}/>
 						        </Scene>						  					    	
 						    <Scene 
-								    key="history" 
-								    title="History" 
+								    key="Diary" 
+								    title="Diary" 
 								    icon={TabView} 				  
 								   >
-							      <Scene key="HistoryScreen"  title="OxalatesApp"  component={History}/>
+							      <Scene key="DiaryScreen"  title="OxalatesApp"  component={Diary}/>
 							</Scene>
 						</Scene>
 					</Scene>
@@ -112,16 +115,20 @@ class RouterComponent extends Component{
 
 const styles ={
 	tabBarStyle: {                  
-            backgroundColor: '#353f40',
+            backgroundColor: '#fff',
             opacity        : 1,
-            height: 60
+            height: 60,
+            borderTopWidth: 1,
+            borderColor: 'grey'
+     
         },
      navBar: {
-   		  backgroundColor: '#353f40',
-   		  borderBottomWidth: 0 
+   		  backgroundColor: '#fff',
+   		  borderBottomWidth: 1 ,
+   		  borderColor: 'grey'
 	},
 	titleNavBarStyle: {
-		 color : "#FFF"
+		 color : "black"
 	},
 	imageStyle:{
 		width: 30,
@@ -129,10 +136,13 @@ const styles ={
 		alignSelf: 'center'
 	}
 }
+
 const mapStateToProps = state =>{
 	return {
-		token: state.auth.token
+		storeRecoveryCompleted: state.storeRecoveryCompleted,
+		token: state.auth.token,
+		profile_submited: state.profile.profile_submited
 	}
 
 }
-export default connect(mapStateToProps,{checkLoginUser})(RouterComponent)
+export default connect(mapStateToProps,{})(RouterComponent)
