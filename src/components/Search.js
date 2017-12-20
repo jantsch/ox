@@ -4,70 +4,89 @@ import { View,Text,ListView } from 'react-native'
 import { 
 		Input,
 		Spinner,
-		DeafultUpperImage
+		DeafultUpperImage,
+		LoadingScreen
 		} from './common'
-import { loginWithProvider } from './../actions'
+import { fetchFood,searchFood,fetchItem } from './../actions'
 import { Actions } from 'react-native-router-flux'
 import { connect} from 'react-redux'
 
-const list = [
-  {
-    name: 'Example food 1',
-    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-    subtitle: 'Type'
-  },
-  {
-    name: 'Example food 2',
-    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-    subtitle: 'Type'
-  }
-]
-
 class Search extends Component{	
-	 constructor() {
-	    super();
-	    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-	    this.state = {
-	      dataSource: ds.cloneWithRows(list),
-	    };
-	  }
 
-	renderRow (rowData, sectionID) {
+	componentWillMount(){		
+		// Used when you return to the component
+		this.createDataSource(this.props)
+	}
+	componentWillReceiveProps(nextProps){
+		
+		this.createDataSource(nextProps)
+	}
+
+
+	createDataSource({foods,searched_food,search_input}){
+		const ds = new ListView.DataSource({
+			rowHasChanged: (r1,r2) => r1 !==r2
+		})
+		this.dataSource = ds.cloneWithRows(search_input.length == 0 ? foods : searched_food) // CORRECT TO PASS the SEARCHED_FOOD IF IT IS NOT NULL
+	}	
+
+	renderRow =  (rowData, sectionID,rowID) => {
 	  return (
 	    <ListItem
 	      key={sectionID}
-	      title={rowData.name}
-	      subtitle={rowData.subtitle}
+	      title={rowData.Name}
+	      subtitle={rowData.Category}
 	      rightTitleNumberOfLines={2}
-	      rightTitle={'52mg \np/slice '}
+	      rightTitle={rowData.Oxalate_Value +'\n' + parseFloat(rowData.ServingSizeNumber).toFixed(2) +' '+rowData.ServingType}
 	      hideChevron	   
-	      onPress={()=> Actions.ItemScreen()}  
+	      onPress={()=> this.props.fetchItem({id:parseInt(rowID)+1, name: rowData.Name, category: rowData.Category,
+	       oxalates: rowData.Oxalate_Value, servingSize: rowData.ServingSizeNumber, servingType: rowData.ServingType, 
+	       oxalateCategory: rowData.OxalateCategory}, this.props.daily_limit) }  
 	    />
 	  )
 	}
 	render(){
-				
-		return(
-			<View>
-				<View style={{marginTop: 55}}>
-					<SearchBar
-					  lightTheme
-					  onChangeText={()=> console.log('teste')}
-					  onClearText={()=> console.log('obj')}
-					  placeholder='Search for food...' />
+		const {loading,search_input} = this.props
+		if (loading) {			 	
+		    return (
+		        <Spinner />
+		    )
+		 }
+		 else{
+			return(
+				<View>
+					<View style={{marginTop: 55}}>
+						<SearchBar
+						  lightTheme
+						  value={search_input}
+						  onChangeText={(value)=> this.props.searchFood(value,this.props.foods)}
+						  onClearText={(value)=> this.props.searchFood(value,this.props.foods)}
+						  placeholder='Search for food...' />
+					</View>
+					<List>
+				      <ListView
+				        renderRow={this.renderRow}
+				        dataSource={this.dataSource}
+				      />
+				    </List>
 				</View>
-				<List>
-			      <ListView
-			        renderRow={this.renderRow}
-			        dataSource={this.state.dataSource}
-			      />
-			    </List>
-			</View>
-		)
+			)
+		}
 	}
 }
 
 
+const mapStateToProps = (state)=>{
+  const  { search_input,foods,searched_food,loading,error } = state.food
+  const  { oxalates_limit } = state.profile
+  return {  search_input,
+  			foods,
+  			searched_food,
+  			loading,
+  			error,
+  			daily_limit: oxalates_limit
+		}
+}
 
 
-export default  Search
+export default connect(mapStateToProps,{fetchFood,searchFood,fetchItem}) (Search)

@@ -5,94 +5,105 @@ import {
 		Input,
 		Spinner,
 		DeafultUpperImage,
-		ModalItem
+		ModalItem,
+		Atribute
 		} from './common'
-import { loginWithProvider } from './../actions'
+import { updateItemCart } from './../actions'
 import { Actions } from 'react-native-router-flux'
 import { connect} from 'react-redux'
 import Modal from 'react-native-modal'
-
+import Pie from 'react-native-pie'
 
 class Item extends Component{	
 	state = {
     	isModalVisible: false,
-    	myNumber:'1'
+    	newNumberSize: this.props.servingSizeCart
   	}
   	_showModal = () => this.setState({ isModalVisible: true })
+	_hideModal = () => {  		
+  		this.setState({ isModalVisible: false })
+  	}
+  	_onSave = () => {  		  		
+  		this.props.updateItemCart(this.state.newNumberSize, this.props.oxalatesValue,this.props.daily_limit) 
+  		this.setState({isModalVisible: false }) 
+  		console.log(this.state);
+  	}
+  	componentWillReceiveProps(nextProps){
 
-  	_hideModal = () => this.setState({ isModalVisible: false })
+  		this.setState({
+	    	newNumberSize: nextProps.servingSizeCart
+	    })
+  	}
 
-  	onChanged(text){
-	    let newText = '';
-	    let numbers = '0123456789';   
-	    this.setState({ myNumber: text.replace(/[^0-9]/g, '') });
+  	onChanged = (text) => {  		    
+	    this.setState({
+	    	newNumberSize: text.replace(/[^0-9.]/g, '')
+	    })
 	}
 
 	render(){
-				
+		const {
+		id,
+		category,
+		name,
+		servingSizeNumber, 
+		servingSizeNumber2 , 
+		servingType , 
+		servingType2, 
+		oxalatesValue, 
+		oxalatesCart,
+		servingSizeCart,
+		oxalateCategory,
+		percentage
+		} = this.props		
 		return(
 			<View>
 				<View style={{marginTop: 55}}>
-					<View style={styles.areaContainer}>
-						<Text style={styles.nameLbl}> Name	</Text>
-					</View>
-					<Divider style={{ backgroundColor: 'grey' }} />
+					<Atribute atributeName={name}/>					
+					
 					<TouchableOpacity onPress={this._showModal}>
-						<View style={styles.areaContainer}>
-							<Text style={styles.nameLbl}> Number of Servings</Text>
-							<Text style={styles.valueLbl}> 10</Text>
-						</View>
+						<Atribute atributeName={'Number of Servings'} atributeValue={parseFloat(servingSizeCart).toFixed(2)}/>						
 					</TouchableOpacity>
+
 					<Modal isVisible={this.state.isModalVisible}>
-			          <ModalItem  title={"How Much?"} onSave={this._hideModal} onCancel={this._hideModal}>	
+			          <ModalItem  title={"How Much?"} onSave={this._onSave} onCancel={this._hideModal}>	
 			          		<View style={styles.textInputContainer}>
 					         	<TextInput 		
 					         	   style={styles.textInput}						   
 								   keyboardType='numeric'
 								   onChangeText={(text)=> this.onChanged(text)}
-								   value={this.state.myNumber}
-								   maxLength={2}
+								   value={this.state.newNumberSize}
+								   maxLength={4}
 								/>		      
 							</View>    		
-			          		<Text style={styles.textStyle}>Serving(s) of XXX </Text>			          		
+			          		<Text style={styles.textStyle}>Serving(s) of {parseFloat(servingSizeNumber).toFixed(2)}{servingType} </Text>			          		
 			          </ModalItem>
 			        </Modal>
-					<Divider style={{ backgroundColor: 'grey' }} />
-					<View style={styles.areaContainer}>
-						<Text style={styles.nameLbl}> Serving Size</Text>
-						<Text style={styles.valueLbl}> 10</Text>
-					</View>
-					<Divider style={{ backgroundColor: 'grey' }} />
-					<View style={styles.areaContainer}>
-						<Text style={styles.nameLbl}> Oxalates</Text>
-						<Text style={styles.valueLbl} > 10</Text>
-					</View>
-					<Divider style={{ backgroundColor: 'grey' }} />
-					<View style={styles.areaContainer}>
-						<Text style={styles.nameLbl}> Percent of daily limit</Text>
-						<Text style={styles.valueLbl} > 10</Text>
-					</View>
+					
+					<Atribute atributeName={'Serving Size'} atributeValue={servingType}/>	
+					<Atribute atributeName={'Oxalates'} atributeValue={oxalatesCart}/>
+					<Atribute atributeName={'Oxalate Category'} atributeValue={oxalateCategory}/>
+					<Atribute atributeName={'Percent of daily limit'}  pieChart/>					
+					<View style={styles.container}>
+				        <View>
+				          <Pie
+				            radius={70}
+				            innerRadius={55}
+				            series={[percentage]}
+				            colors={['#ffc10d']}
+				            backgroundColor='#ddd' />
+				          <View style={styles.gauge}>
+				            <Text style={styles.gaugeText}>{parseFloat(percentage).toFixed(2)}%</Text>
+				          </View>
+				        </View>
+				      </View>
 				</View>
 			</View>
 		)
 	}
 }
 
-const styles ={
-	nameLbl:{
-		flex: 0.85,
-		fontSize: 18
-	},
-	valueLbl:{
-		color: '#55ace0',
-		fontSize: 18
-	},
-	areaContainer:{
-		marginTop: 8,
-		marginBottom: 8,
-		 flexDirection: 'row',
-		 justifyContent: 'center'
-	},
+const styles ={	
 	textInputContainer:{		
 		borderColor: 'grey',
 		borderBottomWidth: 1,
@@ -105,15 +116,48 @@ const styles ={
 	},
 	textStyle:{
 		paddingTop: 7,
+	} ,
+  container: {
+  	marginTop: 45,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  gauge: {
+    position: 'absolute',
+    width: 140,
+    height: 140,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  gaugeText: {
+    backgroundColor: 'transparent',
+    color: '#000',
+    fontSize: 24,
+  },
+}
+const mapStateToProps = (state)=>{
+	const {loading, id, category,name,	servingSizeNumber, servingSizeNumber2 , servingType , 
+	servingType2 , oxalatesValue, oxalateCategory,oxalatesCart,servingSizeCart,percentage} = state.item
+	const  { oxalates_limit } = state.profile
+	return {
+		id,
+		category,
+		name,
+		servingSizeNumber, 
+		servingSizeNumber2 , 
+		servingType , 
+		servingType2, 
+		oxalatesValue, 
+		oxalateCategory,
+		oxalatesCart,
+		servingSizeCart,
+		percentage,
+		daily_limit: oxalates_limit 
 	}
-
-	
-
-
-
 }
 
 
 
 
-export default  Item
+export default  connect(mapStateToProps,{updateItemCart})(Item)

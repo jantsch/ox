@@ -15,6 +15,7 @@
     "react-native-config": "^0.11.1",
     "react-native-elements": "^0.18.4",
     "react-native-modal": "^4.1.1",
+    "react-native-pie": "^0.4.0",
     "react-native-router-flux": "^3.41.0",
     "react-native-simple-auth": "^2.1.0",
     "react-native-splash-screen": "^3.0.6",

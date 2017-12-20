@@ -12,6 +12,7 @@ import { connect} from 'react-redux'
 import {LoadingScreen} from './components/common'
 import SplashScreen from 'react-native-splash-screen'
 import axios from 'axios'
+import { fetchFood } from './actions'
 
 // Simple component to render something in place of icon
 const TabView = ({ selected, title }) => {
@@ -53,10 +54,8 @@ const TabView = ({ selected, title }) => {
 class RouterComponent extends Component{
 
 	render(){	
-		 const {storeRecoveryCompleted,token,profile_submited } = this.props
-		 if (storeRecoveryCompleted==false) {	
-		 	
-		 	debugger;
+		 const {storeRecoveryCompleted,token,profile_submited,foodArray } = this.props		 
+		 if (storeRecoveryCompleted==false) {			 		
 		 	SplashScreen.hide() 
 		    return (
 		        <LoadingScreen />
@@ -64,6 +63,13 @@ class RouterComponent extends Component{
 		 }
 		 else{
 		 	axios.defaults.headers.common['Authorization'] = token;
+
+		 	// FetchData from Server	
+		 	if(foodArray.length ==0)
+		 	{
+		 		this.props.fetchFood()
+		 	}		 	
+		 	
 			const {navBar,tabBarStyle, titleNavBarStyle } = styles			
 			return (
 				<Router navigationBarStyle={navBar} titleStyle={titleNavBarStyle}  >	
@@ -141,8 +147,9 @@ const mapStateToProps = state =>{
 	return {
 		storeRecoveryCompleted: state.storeRecoveryCompleted,
 		token: state.auth.token,
-		profile_submited: state.profile.profile_submited
+		profile_submited: state.profile.profile_submited,
+		foodArray: state.food.foods
 	}
 
 }
-export default connect(mapStateToProps,{})(RouterComponent)
+export default connect(mapStateToProps,{fetchFood})(RouterComponent)

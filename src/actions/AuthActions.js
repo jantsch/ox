@@ -2,9 +2,7 @@ import {
 		INPUT_CHANGE,	
 		LOGIN_USER_SUCCESS,
 		LOGIN_USER_FAIL,
-		LOGIN_USER,
-		CHECK_USER_SUCCESS,
-		CHECK_USER_FAIL		
+		LOGIN_USER	
 	   } from './types'
 
 
@@ -86,7 +84,6 @@ export const loginWithProvider = (provider) => async dispatch =>{
 }
 
 const registerUserWithProvider = (dispatch,provider,info)=>{
-		console.log(Secrets.SERVER_URL +'/api/auth/registerWithProvider');
 		dispatch({type: LOGIN_USER})		
 		axios.post(Secrets.SERVER_URL +'/api/auth/registerWithProvider', {
 		   		provider: provider,
