@@ -3,6 +3,7 @@ import AuthReducer from './AuthReducer'
 import ProfileReducer from './ProfileReducer'
 import FoodReducer from './FoodReducer'
 import FoodItemReducer from './FoodItemReducer'
+import ItemCartReducer from './ItemCartReducer'
 import StoreReducer from './StoreReducer'
 
 export default combineReducers({
@@ -10,5 +11,6 @@ export default combineReducers({
 	profile: ProfileReducer,
 	food: FoodReducer,
 	item: FoodItemReducer,
+	cart: ItemCartReducer,
 	storeRecoveryCompleted: StoreReducer
 })

@@ -33,7 +33,7 @@ const styles ={
 	modalContainer:{
 		backgroundColor: 'white',
 		width: 250,
-		height: 150,
+		height: 200,
 		alignSelf: 'center',		
 	},
 	bottomContainer:{		
@@ -43,7 +43,8 @@ const styles ={
 	},
 	buttonStyle: {
 		 color: '#55ace0',
-		 marginRight: 15
+		 marginRight: 15,
+		 fontSize: 17
 	},
 	titleStyle:{
 		fontSize: 20,
@@ -55,7 +56,8 @@ const styles ={
 		marginLeft: 20,
 		marginTop: 30,
 		flex: 1,
-		flexDirection: 'row',
+
+		flexDirection: 'column',
 
 	}
 

@@ -8,6 +8,7 @@ import SocialLogin from './components/SocialLogin'
 import IntroScreen from './components/Intro'
 import ProfileQuestion from './components/ProfileQuestion'
 import Item from './components/Item'
+import SelectMeal from './components/SelectMeal'
 import { connect} from 'react-redux'
 import {LoadingScreen} from './components/common'
 import SplashScreen from 'react-native-splash-screen'
@@ -70,7 +71,7 @@ class RouterComponent extends Component{
 		 		this.props.fetchFood()
 		 	}		 	
 		 	
-			const {navBar,tabBarStyle, titleNavBarStyle } = styles			
+			const {navBar,tabBarStyle, titleNavBarStyle,rightImageStyle } = styles			
 			return (
 				<Router navigationBarStyle={navBar} titleStyle={titleNavBarStyle}  >	
 					<Scene key="root">		
@@ -102,7 +103,20 @@ class RouterComponent extends Component{
 							    icon={TabView} 							  	
 	           				>
 		                       <Scene key="SearchScreen"  title="OxalatesApp"  initial component={Search}/>
-		                       <Scene key="ItemScreen"  title="Add Food"   component={Item}/>
+			                       <Scene key="ItemScreen" 
+			                       		  title="Add Food"  
+			                       		  component={Item}
+			                       		  onRight={ ()=> Actions.SelectMealScreen() }
+			                       		   rightButtonIconStyle=	{rightImageStyle} 
+		           						  rightButtonImage={require('./../img/tick.png')}
+			                       	>			                      	 	
+			                       	</Scene>
+			                       	<Scene key="SelectMealScreen"  title="Add to"   
+			                      	 		 onRight={ ()=> Actions.SearchScreen() }
+		           						 	 rightButtonImage={require('./../img/tick.png')} 
+		           						 	 rightButtonIconStyle=	{rightImageStyle} 
+		           						 	 component={SelectMeal}
+		           						 />
 						        </Scene>						  					    	
 						    <Scene 
 								    key="Diary" 
@@ -129,6 +143,7 @@ const styles ={
      
         },
      navBar: {
+     	flex: 0.5,
    		  backgroundColor: '#fff',
    		  borderBottomWidth: 1 ,
    		  borderColor: 'grey'
@@ -140,6 +155,10 @@ const styles ={
 		width: 30,
 	 	height: 30,
 		alignSelf: 'center'
+	},
+	rightImageStyle:{ 
+		width: 22,
+		height:22
 	}
 }
 

@@ -28,8 +28,12 @@ class Search extends Component{
 			rowHasChanged: (r1,r2) => r1 !==r2
 		})
 		this.dataSource = ds.cloneWithRows(search_input.length == 0 ? foods : searched_food) // CORRECT TO PASS the SEARCHED_FOOD IF IT IS NOT NULL
-	}	
+	}
 
+	isFloat = (n) =>  {
+   		return n % 1 !== 0;
+	}	
+	
 	renderRow =  (rowData, sectionID,rowID) => {
 	  return (
 	    <ListItem
@@ -37,13 +41,37 @@ class Search extends Component{
 	      title={rowData.Name}
 	      subtitle={rowData.Category}
 	      rightTitleNumberOfLines={2}
-	      rightTitle={rowData.Oxalate_Value +'\n' + parseFloat(rowData.ServingSizeNumber).toFixed(2) +' '+rowData.ServingType}
+	      rightTitleStyle={{ justifyContent: 'flex-end'}}
+	      rightTitle={rowData.Oxalate_Value +'\n' + (this.isFloat(rowData.ServingSizeNumber)?  parseFloat(rowData.ServingSizeNumber).toFixed(2) : rowData.ServingSizeNumber) +' '+rowData.ServingType}
 	      hideChevron	   
 	      onPress={()=> this.props.fetchItem({id:parseInt(rowID)+1, name: rowData.Name, category: rowData.Category,
-	       oxalates: rowData.Oxalate_Value, servingSize: rowData.ServingSizeNumber, servingType: rowData.ServingType, 
+	       oxalates: rowData.Oxalate_Value, servingSize: rowData.ServingSizeNumber,servingSize2: rowData.ServingSizeNumber2, servingType: rowData.ServingType,servingType2: rowData.ServingType2, 
 	       oxalateCategory: rowData.OxalateCategory}, this.props.daily_limit) }  
 	    />
 	  )
+	}
+	renderList =() => {
+		if(this.props.search_input.length>0 &&  this.props.searched_food.length==0){
+						return(
+							<View style={styles.messageContainerStyle}>
+								<Text  style={styles.messageStyle}> It is impossible to find the desired item. :/ </Text>
+							</View>
+					)
+		}
+		else
+		{
+			return (
+				<List>
+				      <ListView
+				      style={{height: 442}}
+				        renderRow={this.renderRow}
+				        dataSource={this.dataSource}
+				      />
+				    </List>
+				)
+
+		}
+
 	}
 	render(){
 		const {loading,search_input} = this.props
@@ -55,23 +83,35 @@ class Search extends Component{
 		 else{
 			return(
 				<View>
-					<View style={{marginTop: 55}}>
-						<SearchBar
+					<View style={{marginTop: 55,height: 38}}>
+						<SearchBar						
 						  lightTheme
 						  value={search_input}
+						  showLoadingIcon={loading}
 						  onChangeText={(value)=> this.props.searchFood(value,this.props.foods)}
 						  onClearText={(value)=> this.props.searchFood(value,this.props.foods)}
 						  placeholder='Search for food...' />
 					</View>
-					<List>
-				      <ListView
-				        renderRow={this.renderRow}
-				        dataSource={this.dataSource}
-				      />
-				    </List>
+					{
+						this.renderList()
+					}	
+					
 				</View>
 			)
 		}
+	}
+}
+
+const styles = {
+	messageContainerStyle:{	
+		marginTop: 35,
+	},
+	messageStyle:{
+		fontSize: 20,	
+		alignSelf: 'center',
+		width:250,
+		textAlign: 'center'
+		
 	}
 }
 

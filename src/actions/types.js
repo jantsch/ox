@@ -18,6 +18,7 @@ export const SEARCH_FOOD_FAIL = 'search_food_fail'
 export const FETCH_ITEM = 'fetch_item'
 export const FETCH_ITEM_SUCCESS = 'fetch_item_success'
 export const FETCH_ITEM_FAIL = 'fetch_item_fail'
+export const FETCH_CART = 'fetch_cart'
 export const UPDATE_ITEM_CART = 'update_item_cart'
 
 

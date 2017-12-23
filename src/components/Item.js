@@ -2,11 +2,9 @@ import React, {Component} from 'react'
 import { Divider  } from 'react-native-elements'
 import { View,Text,ListView,TouchableOpacity,TextInput } from 'react-native'
 import { 
-		Input,
-		Spinner,
-		DeafultUpperImage,
 		ModalItem,
-		Atribute
+		Atribute,
+		ServingTypesPicker
 		} from './common'
 import { updateItemCart } from './../actions'
 import { Actions } from 'react-native-router-flux'
@@ -17,21 +15,29 @@ import Pie from 'react-native-pie'
 class Item extends Component{	
 	state = {
     	isModalVisible: false,
-    	newNumberSize: this.props.servingSizeCart
+    	newNumberSize: this.props.servingSizeCart,
+    	newServingOption: this.props.servingOptionCart
   	}
   	_showModal = () => this.setState({ isModalVisible: true })
 	_hideModal = () => {  		
   		this.setState({ isModalVisible: false })
   	}
   	_onSave = () => {  		  		
-  		this.props.updateItemCart(this.state.newNumberSize, this.props.oxalatesValue,this.props.daily_limit) 
+  		this.props.updateItemCart(
+  			this.state.newNumberSize, 
+  			this.state.newServingOption,
+  			this.props.oxalatesValue,
+  			this.props.daily_limit
+  		) 
+  		
   		this.setState({isModalVisible: false }) 
-  		console.log(this.state);
+  		
   	}
   	componentWillReceiveProps(nextProps){
 
   		this.setState({
-	    	newNumberSize: nextProps.servingSizeCart
+	    	newNumberSize: nextProps.servingSizeCart,
+	    	newServingOption: nextProps.servingOptionCart
 	    })
   	}
 
@@ -41,6 +47,11 @@ class Item extends Component{
 	    })
 	}
 
+	onChangeOption = (option) => {  
+	    this.setState({
+	    	newServingOption: option
+	    })
+	}
 	render(){
 		const {
 		id,
@@ -51,9 +62,10 @@ class Item extends Component{
 		servingType , 
 		servingType2, 
 		oxalatesValue, 
+		oxalateCategory,
 		oxalatesCart,
 		servingSizeCart,
-		oxalateCategory,
+		servingOptionCart,
 		percentage
 		} = this.props		
 		return(
@@ -66,7 +78,8 @@ class Item extends Component{
 					</TouchableOpacity>
 
 					<Modal isVisible={this.state.isModalVisible}>
-			          <ModalItem  title={"How Much?"} onSave={this._onSave} onCancel={this._hideModal}>	
+			          <ModalItem  title={"How Much?"} onSave={this._onSave} onCancel={this._hideModal}>
+			          	<View style={styles.firstRowStyle}>	
 			          		<View style={styles.textInputContainer}>
 					         	<TextInput 		
 					         	   style={styles.textInput}						   
@@ -76,11 +89,20 @@ class Item extends Component{
 								   maxLength={4}
 								/>		      
 							</View>    		
-			          		<Text style={styles.textStyle}>Serving(s) of {parseFloat(servingSizeNumber).toFixed(2)}{servingType} </Text>			          		
+			          		<Text style={styles.textStyle}>Serving(s) of </Text>          				      
+						</View>   
+			          		<ServingTypesPicker 
+			          			selectedValue={this.state.newServingOption}
+			          			changeServingOption={(itemValue, itemIndex) => this.onChangeOption(itemValue)}
+			          			servingSizeNumber={servingSizeNumber} 
+			          			servingSizeNumber2={servingSizeNumber2} 
+			          			servingType={servingType} 
+			          			servingType2={servingType2} 
+			          		/>			          		
 			          </ModalItem>
 			        </Modal>
 					
-					<Atribute atributeName={'Serving Size'} atributeValue={servingType}/>	
+					<Atribute atributeName={'Serving Size'} atributeValue={servingOptionCart.split('---')[0]}/>	
 					<Atribute atributeName={'Oxalates'} atributeValue={oxalatesCart}/>
 					<Atribute atributeName={'Oxalate Category'} atributeValue={oxalateCategory}/>
 					<Atribute atributeName={'Percent of daily limit'}  pieChart/>					
@@ -104,14 +126,18 @@ class Item extends Component{
 }
 
 const styles ={	
+	firstRowStyle:{
+		flexDirection: 'row',
+	},
 	textInputContainer:{		
 		borderColor: 'grey',
 		borderBottomWidth: 1,
-		height:30
+		height:30,
+		width: 40
 	},
 	textInput:{
 		flex:1,
-		paddingBottom: 3,
+		paddingBottom: 5,
 		paddingLeft: 15
 	},
 	textStyle:{
@@ -137,9 +163,24 @@ const styles ={
   },
 }
 const mapStateToProps = (state)=>{
-	const {loading, id, category,name,	servingSizeNumber, servingSizeNumber2 , servingType , 
-	servingType2 , oxalatesValue, oxalateCategory,oxalatesCart,servingSizeCart,percentage} = state.item
+	const {
+	id,
+	category,name,
+	servingSizeNumber,
+	servingSizeNumber2 ,
+	servingType ,
+	servingType2 ,
+	oxalatesValue,
+	oxalateCategory,
+	loading
+	} = state.item
 	const  { oxalates_limit } = state.profile
+	const { 
+		oxalatesCart,
+		servingOptionCart,
+		servingSizeCart,
+		percentage
+	} = state.cart
 	return {
 		id,
 		category,
@@ -151,6 +192,7 @@ const mapStateToProps = (state)=>{
 		oxalatesValue, 
 		oxalateCategory,
 		oxalatesCart,
+		servingOptionCart,
 		servingSizeCart,
 		percentage,
 		daily_limit: oxalates_limit 
