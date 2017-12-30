@@ -20,8 +20,11 @@ export const FETCH_ITEM_SUCCESS = 'fetch_item_success'
 export const FETCH_ITEM_FAIL = 'fetch_item_fail'
 export const FETCH_CART = 'fetch_cart'
 export const UPDATE_ITEM_CART = 'update_item_cart'
+export const UPDATE_ITEM_MEAL_CART = 'uptade_item_meal_cart'
+export const SUBMIT_ITEM_CART ='submit_item_cart'
+export const SET_MEAL_DATE_CART ='set_meal_date_cart'
 
-
+export const ON_DAY_CHANGED = 'on_day_changed'
 
 
 export const SETTINGS_CHANGE = 'settings_change'

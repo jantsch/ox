@@ -22,6 +22,7 @@ export const fetchItem = (item,daily_limit)=>{
   		dispatch({type: FETCH_ITEM, payload: {...item}})
   		dispatch({type: FETCH_CART, 
   			payload: {
+  				name: item.name,
   				servingSizeCart: '1',
   				oxalatesCart: item.oxalates,
   				servingOptionCart:  item.servingSize +' '+  item.servingType+'---' +  item.servingSize ,

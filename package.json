@@ -9,6 +9,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "lodash": "^4.17.4",
+    "moment": "^2.20.1",
     "react": "16.0.0",
     "react-native": "0.51.0",
     "react-native-app-intro": "^1.1.5",
@@ -19,10 +20,12 @@
     "react-native-router-flux": "^3.41.0",
     "react-native-simple-auth": "^2.1.0",
     "react-native-splash-screen": "^3.0.6",
+    "react-native-swiper": "^1.5.13",
     "react-native-vector-icons": "^4.4.2",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "redux-persist": "^4.10.0",
+    "redux-persist-transform-filter": "0.0.16",
     "redux-thunk": "^2.2.0"
   },
   "devDependencies": {

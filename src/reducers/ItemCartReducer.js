@@ -1,25 +1,34 @@
 import {
 		UPDATE_ITEM_CART,
-		FETCH_CART
+		UPDATE_ITEM_MEAL_CART,
+		FETCH_CART,
+		SET_MEAL_DATE_CART,
+		SUBMIT_ITEM_CART
 	} from '../actions/types'
 
+import moment from 'moment'
 
 const INITIAL_STATE ={
+	name: null,
 	servingSizeCart: null,
-	servingOptionCart: null, 
+	servingOptionCart: '---', 
 	oxalatesCart: null ,
 	percentage: null,
+	day: moment() ,
+	meal: 'Breakfast',
+	dmSetViaButton: false,
 	loading : false,	
 	error: ''
 }
 
 
+
+
 export default (state=INITIAL_STATE,action) => {	
-	console.log(state);
-	console.log(action);
 	switch(action.type){	
 		case FETCH_CART:
 			return {...state,
+					name: action.payload.name,
 					servingSizeCart: action.payload.servingSizeCart,
 					servingOptionCart: action.payload.servingOptionCart,
 					oxalatesCart: action.payload.oxalatesCart,
@@ -32,6 +41,19 @@ export default (state=INITIAL_STATE,action) => {
 					oxalatesCart: action.payload.oxalatesCart,
 					percentage: action.payload.percentage,
 					}
+		case UPDATE_ITEM_MEAL_CART:
+			return { ...state,
+					day: action.payload.day,
+					meal: action.payload.meal
+			}
+		case SUBMIT_ITEM_CART:
+			return {...INITIAL_STATE}
+		case SET_MEAL_DATE_CART:
+			return { ...state,
+					day: action.payload.day,
+					meal: action.payload.meal,
+					dmSetViaButton: true
+			}
 		default:
 			return state
 	}

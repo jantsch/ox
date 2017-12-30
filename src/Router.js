@@ -13,7 +13,7 @@ import { connect} from 'react-redux'
 import {LoadingScreen} from './components/common'
 import SplashScreen from 'react-native-splash-screen'
 import axios from 'axios'
-import { fetchFood } from './actions'
+import { fetchFood,submitCartItem } from './actions'
 
 // Simple component to render something in place of icon
 const TabView = ({ selected, title }) => {
@@ -55,7 +55,7 @@ const TabView = ({ selected, title }) => {
 class RouterComponent extends Component{
 
 	render(){	
-		 const {storeRecoveryCompleted,token,profile_submited,foodArray } = this.props		 
+		 const {storeRecoveryCompleted,token,profile_submited,foodArray,itemCart } = this.props		 
 		 if (storeRecoveryCompleted==false) {			 		
 		 	SplashScreen.hide() 
 		    return (
@@ -106,18 +106,26 @@ class RouterComponent extends Component{
 			                       <Scene key="ItemScreen" 
 			                       		  title="Add Food"  
 			                       		  component={Item}
-			                       		  onRight={ ()=> Actions.SelectMealScreen() }
+			                       		  onRight={ ()=> {
+			                       		  		this.props.itemCart.dmSetViaButton ? 
+			                       		  		(
+			                       		  			this.props.submitCartItem(this.props.itemCart),
+			                       		  		 	Actions.Diary()
+			           							) 
+			                       		  		: 
+			                       		  		Actions.SelectMealScreen()
+			                       		   }}
 			                       		   rightButtonIconStyle=	{rightImageStyle} 
 		           						  rightButtonImage={require('./../img/tick.png')}
 			                       	>			                      	 	
 			                       	</Scene>
 			                       	<Scene key="SelectMealScreen"  title="Add to"   
-			                      	 		 onRight={ ()=> Actions.SearchScreen() }
+			                      	 		 onRight={ ()=> {this.props.submitCartItem(this.props.itemCart);Actions.SearchScreen({type: 'reset'})} }
 		           						 	 rightButtonImage={require('./../img/tick.png')} 
 		           						 	 rightButtonIconStyle=	{rightImageStyle} 
 		           						 	 component={SelectMeal}
 		           						 />
-						        </Scene>						  					    	
+						       </Scene>						  					    	
 						    <Scene 
 								    key="Diary" 
 								    title="Diary" 
@@ -167,8 +175,9 @@ const mapStateToProps = state =>{
 		storeRecoveryCompleted: state.storeRecoveryCompleted,
 		token: state.auth.token,
 		profile_submited: state.profile.profile_submited,
-		foodArray: state.food.foods
+		foodArray: state.food.foods,
+		itemCart: state.cart
 	}
 
 }
-export default connect(mapStateToProps,{fetchFood})(RouterComponent)
+export default connect(mapStateToProps,{fetchFood,submitCartItem})(RouterComponent)
