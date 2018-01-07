@@ -9,6 +9,8 @@ import IntroScreen from './components/Intro'
 import ProfileQuestion from './components/ProfileQuestion'
 import Item from './components/Item'
 import SelectMeal from './components/SelectMeal'
+import FiltersScreen from './components/FiltersScreen'
+import FilterSelection from './components/FilterSelection'
 import { connect} from 'react-redux'
 import {LoadingScreen} from './components/common'
 import SplashScreen from 'react-native-splash-screen'
@@ -102,36 +104,56 @@ class RouterComponent extends Component{
 							    title="Search" 
 							    icon={TabView} 							  	
 	           				>
-		                       <Scene key="SearchScreen"  title="OxalatesApp"  initial component={Search}/>
-			                       <Scene key="ItemScreen" 
-			                       		  title="Add Food"  
-			                       		  component={Item}
-			                       		  onRight={ ()=> {
+		                       <Scene key="SearchScreen"  title="OxalatesApp"  
+		                       			initial 
+		                       			component={Search} 
+		                       			onRight={ ()=> {Actions.FiltersScreen()} }		           						 	
+		                       			rightButtonIconStyle={rightImageStyle}		                       			 
+		           						rightButtonImage={require('./../img/filter-results-button.png')}
+		           				/>
+		           			   <Scene key="FiltersScreen"    title="Filters" component={FiltersScreen}/>
+		           			   <Scene key="FilterSelection"    getTitle={this.props.title} component={FilterSelection}/>
+		           			  <Scene key="ItemScreen"    title="Add Food" component={Item}
+			                       	  onRight={ ()=> {
 			                       		  		this.props.itemCart.dmSetViaButton ? 
 			                       		  		(
-			                       		  			this.props.submitCartItem(this.props.itemCart),
+			                       		  			this.props.submitCartItem(this.props.itemCart),			                       		  			
+			                       		  		 	Actions.SearchScreen({type: 'reset'}),
 			                       		  		 	Actions.Diary()
-			           							) 
+			           
+			                       		  		) 
 			                       		  		: 
 			                       		  		Actions.SelectMealScreen()
-			                       		   }}
-			                       		   rightButtonIconStyle=	{rightImageStyle} 
-		           						  rightButtonImage={require('./../img/tick.png')}
-			                       	>			                      	 	
-			                       	</Scene>
-			                       	<Scene key="SelectMealScreen"  title="Add to"   
+			                       		}}
+			                       		rightButtonIconStyle=	{rightImageStyle} 
+		           						rightButtonImage={require('./../img/tick.png')}
+			                     />
+			                   <Scene key="SelectMealScreen"  title="Add to"   
 			                      	 		 onRight={ ()=> {this.props.submitCartItem(this.props.itemCart);Actions.SearchScreen({type: 'reset'})} }
 		           						 	 rightButtonImage={require('./../img/tick.png')} 
 		           						 	 rightButtonIconStyle=	{rightImageStyle} 
 		           						 	 component={SelectMeal}
-		           						 />
-						       </Scene>						  					    	
+		           				/>
+						    </Scene>						  					    	
 						    <Scene 
 								    key="Diary" 
 								    title="Diary" 
-								    icon={TabView} 				  
+								    icon={TabView} 									    			  
 								   >
 							      <Scene key="DiaryScreen"  title="OxalatesApp"  component={Diary}/>
+							       <Scene key="EditItemScreen"    title="Edit Food" component={Item}
+			                       	  onRight={ ()=> {Actions.SelectMealScreenEdit()}}
+			                       		rightButtonIconStyle=	{rightImageStyle} 
+		           						rightButtonImage={require('./../img/tick.png')}
+			                     />
+			                    <Scene key="SelectMealScreenEdit"  title="Edit Food"   
+			                      	 		 onRight={ ()=> {			                      	 		 
+			                      	 		 	this.props.submitCartItem({...this.props.itemCart, edited: true }),			                      	 	
+			                      	 		 	Actions.DiaryScreen({type: 'reset'})} }
+		           						 	 rightButtonImage={require('./../img/tick.png')} 
+		           						 	 rightButtonIconStyle=	{rightImageStyle} 
+		           						 	 component={SelectMeal}
+		           				/>
 							</Scene>
 						</Scene>
 					</Scene>

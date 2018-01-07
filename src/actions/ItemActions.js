@@ -13,7 +13,7 @@ import {Actions} from 'react-native-router-flux'
 
 
 export const fetchItem = (item,daily_limit)=>{
-	console.log(item.servingType + item.servingSize);
+
 	return (dispatch) =>{
 
   		oxalatesValue = item.oxalates.slice(0, -2);
@@ -22,6 +22,7 @@ export const fetchItem = (item,daily_limit)=>{
   		dispatch({type: FETCH_ITEM, payload: {...item}})
   		dispatch({type: FETCH_CART, 
   			payload: {
+  				id: item.id,
   				name: item.name,
   				servingSizeCart: '1',
   				oxalatesCart: item.oxalates,

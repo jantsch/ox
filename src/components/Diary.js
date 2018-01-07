@@ -7,7 +7,7 @@ import {
 		DeafultUpperImage,
 		DiaryDetails
 		} from './common'
-import { onDayChange, setMealDateCart} from './../actions'
+import { onDayChange, setMealDateCart,onDeleteItemDiary,onEditItemDiary} from './../actions'
 import { Actions } from 'react-native-router-flux'
 import { connect} from 'react-redux'
 import Swiper from 'react-native-swiper'
@@ -45,15 +45,12 @@ class Diary extends Component{
 			 		switch(this.state.index)
 			 		{
 			 			case 0: 
-			 				console.log('000');
 			 				this.setState({current:current, past:past,future:future })
 			 				break
-			 			case 1:
-			 				console.log('111');
+			 			case 1:			 			
 				 			this.setState({current:past, past:future,future:current })
 				 			break
 			 			case 2:
-			 				console.log('222');
 			 				this.setState({current:future, past:current,future:past })
 			 				break
 		 			}
@@ -136,9 +133,9 @@ class Diary extends Component{
 					 	style={styles.wrapper}  
 					 	ref={(swiper) => {this.swiper = swiper;}}
 					 	onMomentumScrollEnd={this.onMomentumScrollEnd} >
-						 <DiaryDetails onAddPressed={this.props.setMealDateCart} date={this.props.today.clone()}   dayLimit={this.props.dayLimit} consumedItems={this.state.current}/>
-						 <DiaryDetails onAddPressed={this.props.setMealDateCart}  date={this.props.today.clone()}  dayLimit={this.props.dayLimit} consumedItems={this.state.future}/>
-						 <DiaryDetails onAddPressed={this.props.setMealDateCart}  date={this.props.today.clone()}  dayLimit={this.props.dayLimit} consumedItems={this.state.past} />
+						 <DiaryDetails onAddPressed={this.props.setMealDateCart} onEditItemDiary={this.props.onEditItemDiary} onDeleteItemDiary={this.props.onDeleteItemDiary} date={this.props.today.clone()}   dayLimit={this.props.dayLimit} consumedItems={this.state.current}/>
+						 <DiaryDetails onAddPressed={this.props.setMealDateCart} onEditItemDiary={this.props.onEditItemDiary} onDeleteItemDiary={this.props.onDeleteItemDiary} date={this.props.today.clone()}  dayLimit={this.props.dayLimit} consumedItems={this.state.future}/>
+						 <DiaryDetails onAddPressed={this.props.setMealDateCart} onEditItemDiary={this.props.onEditItemDiary} onDeleteItemDiary={this.props.onDeleteItemDiary} date={this.props.today.clone()}  dayLimit={this.props.dayLimit} consumedItems={this.state.past} />
 				    </Swiper>		               
 			    </View>			
 		)
@@ -171,4 +168,4 @@ const mapStateToProps = state =>{
 }
 
 
-export default connect(mapStateToProps,{onDayChange,setMealDateCart}) (Diary)
+export default connect(mapStateToProps,{onDayChange,setMealDateCart,onDeleteItemDiary,onDeleteItemDiary,onEditItemDiary}) (Diary)

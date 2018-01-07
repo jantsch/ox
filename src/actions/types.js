@@ -23,8 +23,13 @@ export const UPDATE_ITEM_CART = 'update_item_cart'
 export const UPDATE_ITEM_MEAL_CART = 'uptade_item_meal_cart'
 export const SUBMIT_ITEM_CART ='submit_item_cart'
 export const SET_MEAL_DATE_CART ='set_meal_date_cart'
+export const ON_DELETE_ITEM_DIARY ='on_delete_item_diary'
+export const ON_EDIT_ITEM_DIARY ='on_edit_item_diary'
+export const ON_UPDATE_ITEM_DIARY ='on_update_item_diary'
 
 export const ON_DAY_CHANGED = 'on_day_changed'
+
+export const SAVE_FILTERS ='save_filters'
 
 
 export const SETTINGS_CHANGE = 'settings_change'

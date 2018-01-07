@@ -3,12 +3,14 @@ import {
 		UPDATE_ITEM_MEAL_CART,
 		FETCH_CART,
 		SET_MEAL_DATE_CART,
-		SUBMIT_ITEM_CART
+		SUBMIT_ITEM_CART,
+		ON_EDIT_ITEM_DIARY
 	} from '../actions/types'
 
 import moment from 'moment'
 
 const INITIAL_STATE ={
+	id: null,
 	name: null,
 	servingSizeCart: null,
 	servingOptionCart: '---', 
@@ -17,17 +19,27 @@ const INITIAL_STATE ={
 	day: moment() ,
 	meal: 'Breakfast',
 	dmSetViaButton: false,
-	loading : false,	
+	loading : false,
+	edited: false,	
 	error: ''
 }
 
-
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4();
+}
 
 
 export default (state=INITIAL_STATE,action) => {	
 	switch(action.type){	
 		case FETCH_CART:
 			return {...state,
+					id: guid(),
 					name: action.payload.name,
 					servingSizeCart: action.payload.servingSizeCart,
 					servingOptionCart: action.payload.servingOptionCart,
@@ -54,6 +66,9 @@ export default (state=INITIAL_STATE,action) => {
 					meal: action.payload.meal,
 					dmSetViaButton: true
 			}
+		case ON_EDIT_ITEM_DIARY:
+			return 	action.payload
+	
 		default:
 			return state
 	}

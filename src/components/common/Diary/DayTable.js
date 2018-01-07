@@ -17,7 +17,7 @@ const  DayTable= ({DailyLimitOxalates,FoodList}) =>{
 		  } = styles
 
 	_calculateOxalates =() =>{	
-		
+
 		if(FoodList.length ==0)
 			return 0
 		else{

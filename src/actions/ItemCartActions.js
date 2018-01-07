@@ -2,7 +2,8 @@ import {
 		UPDATE_ITEM_CART,
 		UPDATE_ITEM_MEAL_CART,
 		SUBMIT_ITEM_CART,
-		SET_MEAL_DATE_CART
+		SET_MEAL_DATE_CART,
+		ON_UPDATE_ITEM_DIARY
 	   } from './types'
 
 
@@ -51,10 +52,24 @@ export const updateItemMealCart = (meal)=>{
 }
 
 export const submitCartItem =(cart) =>{
-	return{
-			type: SUBMIT_ITEM_CART, 
-			payload: cart
+	return (dispatch) =>{
+		if(cart.edited == true)
+		{	
+			dispatch({
+				type: ON_UPDATE_ITEM_DIARY, 
+				payload: cart
+			})
+		}
+		else
+		{
+			dispatch({
+				type: SUBMIT_ITEM_CART, 
+				payload: cart
+			})
+		}
+
 	}
+	
 }
 
 export const setMealDateCart =(meal,day) =>{

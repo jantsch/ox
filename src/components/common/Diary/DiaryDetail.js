@@ -1,27 +1,22 @@
-import React  from 'react'
+import React, {Component} from 'react'
 import {
 		View,
  		Image,
 		Text ,
-		TouchableOpacity
+		TouchableOpacity,
+		ListView,
+		TouchableHighlight
 	   } from 'react-native'
 import { Divider  } from 'react-native-elements'
+import { SwipeList } from './../SwipeList';
 
 
 
-const  DiaryDetail = ({Meal,FoodList,onAddPressButton}) =>{
-	const {
-			areaContainer,
-			titleContainerStyle,
-			titleStyle,
-			iconStyle,
-			nameLbl,
-			valueLbl,
-			color,
-			oxalatesBoxStyle,
-			addContainerStyle
-		  } = styles
-	_calculateOxalates =() =>{	
+class  DiaryDetail extends Component{
+
+
+
+	_calculateOxalates =(FoodList) =>{	
 
 		if(FoodList.length ==0)
 			return 0
@@ -35,28 +30,34 @@ const  DiaryDetail = ({Meal,FoodList,onAddPressButton}) =>{
 					
 					return {oxalatesCart: a.oxalatesCart +b.oxalatesCart }
 				});
-			
-
 			return oxalates.oxalatesCart
 			}
 		}
 	}
+
+	
+	render(){
+		const {
+			areaContainer,
+			titleContainerStyle,
+			titleStyle,
+			iconStyle,
+			nameLbl,
+			valueLbl,
+			color,
+			oxalatesBoxStyle,
+			addContainerStyle
+		  } = styles
+
+	const {Meal,FoodList,onAddPressButton,onDeleteItemDiary,onEditItemDiary} = this.props
 	
 	return(	
 			<View style={areaContainer}>
 				<View style={titleContainerStyle}>
 					<Text style={titleStyle}> {Meal}</Text>
-					<Text style={oxalatesBoxStyle}> {this._calculateOxalates()} mg</Text>
+					<Text style={oxalatesBoxStyle}> {this._calculateOxalates(this.props.FoodList)} mg</Text>
 				</View>
-				{FoodList.map((item,i)=>{
-					return(
-						<View key={i} style={styles.itemContainer}>
-							<Text style={styles.itemName}> {item.name} </Text>
-							<Text style={styles.oxalatesBoxStyle}> {item.oxalatesCart} </Text>
-						</View>
-					)
-
-				})}
+				<SwipeList FoodList={FoodList} onEdit={onEditItemDiary} onDelete={onDeleteItemDiary} />
 				<TouchableOpacity onPress={() => {onAddPressButton(Meal)}}>
 					<View style={addContainerStyle}>
 						<Image	style={iconStyle} source={require('./../../../../img/add.png')}/>
@@ -65,6 +66,7 @@ const  DiaryDetail = ({Meal,FoodList,onAddPressButton}) =>{
 				</TouchableOpacity>
 			</View>
 	)
+}
 }
 
 
@@ -118,6 +120,42 @@ const styles ={
 	},
 	oxalatesBoxStyle:{
 		flex: 1
+	},
+	backTextWhite: {
+		color: '#FFF'
+	},
+	rowFront: {
+		flexDirection: 'row',
+		backgroundColor: 'white',
+		paddingLeft: 10,
+		paddingTop: 5,
+		paddingBottom: 5,
+		borderTopWidth: 1,
+		borderColor: 'grey',
+	},
+	rowBack: {
+		alignItems: 'center',
+		backgroundColor: '#DDD',
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		paddingLeft: 15,
+	},
+	backRightBtn: {
+		alignItems: 'center',
+		bottom: 0,
+		justifyContent: 'center',
+		position: 'absolute',
+		top: 0,
+		width: 75
+	},
+	backRightBtnLeft: {
+		backgroundColor: 'blue',
+		right: 75
+	},
+	backRightBtnRight: {
+		backgroundColor: 'red',
+		right: 0
 	}
 }
 

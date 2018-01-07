@@ -88,14 +88,13 @@ class Search extends Component{
 						  lightTheme
 						  value={search_input}
 						  showLoadingIcon={loading}
-						  onChangeText={(value)=> this.props.searchFood(value,this.props.foods)}
-						  onClearText={(value)=> this.props.searchFood(value,this.props.foods)}
+						  onChangeText={(value)=> this.props.searchFood(value,this.props.foods,this.props.filters)}
+						  onClearText={(value)=> this.props.searchFood(value,this.props.foods,this.props.filters)}
 						  placeholder='Search for food...' />
 					</View>
 					{
 						this.renderList()
-					}	
-					
+					}					
 				</View>
 			)
 		}
@@ -119,12 +118,15 @@ const styles = {
 const mapStateToProps = (state)=>{
   const  { search_input,foods,searched_food,loading,error } = state.food
   const  { oxalates_limit } = state.profile
+  const  { activeCategoriesList,activeCategoriesOxalatesList } = state.filter
   return {  search_input,
   			foods,
   			searched_food,
   			loading,
   			error,
-  			daily_limit: oxalates_limit
+  			daily_limit: oxalates_limit,
+  			filters: {activeCategoriesOxalatesList,activeCategoriesList}
+  			
 		}
 }
 

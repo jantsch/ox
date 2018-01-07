@@ -29,13 +29,38 @@ export const fetchFood = ()=>{
 }
 
 
-export const searchFood = (word,foodsArray)=>{
+export const searchFood = (word,foodsArray,filters)=>{
 	
 	return (dispatch) =>{
 
 			dispatch({type: SEARCH_FOOD,payload: word})			
+			
+			if(filters.activeCategoriesList.length >0 || filters.activeCategoriesOxalatesList.length >0)
+			{
+				if(filters.activeCategoriesList.length >0 && filters.activeCategoriesOxalatesList.length >0)
+				{
+					var searched_foods = foodsArray.filter(food => ((food.Name.toLowerCase()).indexOf(word.toLowerCase()) !==-1) 
+												 && (filters.activeCategoriesList.indexOf(food.Category) !==-1) 
+												 && (filters.activeCategoriesOxalatesList.indexOf(food.OxalateCategory) !==-1))
+				}
+				else if(filters.activeCategoriesList.length >0)
+				{
+					var searched_foods = foodsArray.filter(food => ((food.Name.toLowerCase()).indexOf(word.toLowerCase()) !==-1) 
+												 && (filters.activeCategoriesList.indexOf(food.Category) !==-1))
+				}
+				else if(filters.activeCategoriesOxalatesList.length >0)
+				{
+					var searched_foods = foodsArray.filter(food => ((food.Name.toLowerCase()).indexOf(word.toLowerCase()) !==-1) 												
+												 && (filters.activeCategoriesOxalatesList.indexOf(food.OxalateCategory) !==-1))
+				}
 
-			var searched_foods = foodsArray.filter(food => (food.Name.toLowerCase()).indexOf(word.toLowerCase()) !==-1)
+			}
+			else
+			{
+					var searched_foods = foodsArray.filter(food => ((food.Name.toLowerCase()).indexOf(word.toLowerCase()) !==-1))
+			}
+
+		
 			
 			dispatch({type:SEARCH_FOOD_SUCCESS,	payload: searched_foods})
 	}

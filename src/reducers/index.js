@@ -6,6 +6,7 @@ import FoodItemReducer from './FoodItemReducer'
 import ItemCartReducer from './ItemCartReducer'
 import DiaryReducer from './DiaryReducer'
 import StoreReducer from './StoreReducer'
+import FilterReducer from './FilterReducer'
 
 export default combineReducers({
 	auth: AuthReducer,
@@ -14,5 +15,6 @@ export default combineReducers({
 	item: FoodItemReducer,
 	cart: ItemCartReducer,
 	diary: DiaryReducer,
+	filter:FilterReducer,
 	storeRecoveryCompleted: StoreReducer
 })

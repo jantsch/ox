@@ -10,7 +10,7 @@ import { DiaryDetail, DayTable  } from './Diary'
 
 
 
-const  DiaryDetails = ({dayLimit,consumedItems,date,onAddPressed}) =>{
+const  DiaryDetails = ({dayLimit,consumedItems,date,onAddPressed,onDeleteItemDiary,onEditItemDiary}) =>{
 	const {
 			areaContainer,
 			nameLbl,
@@ -44,10 +44,10 @@ const  DiaryDetails = ({dayLimit,consumedItems,date,onAddPressed}) =>{
 				<ScrollView>
 					<View style={areaContainer}>
 						<DayTable  DailyLimitOxalates={dayLimit} FoodList={this.buildFoodList()} />
-						<DiaryDetail Meal={'Breakfast'} onAddPressButton={this.onAddPressButton} FoodList={this.buildFoodList('Breakfast')} />
-						<DiaryDetail Meal={'Lunch'} onAddPressButton={this.onAddPressButton}  FoodList={this.buildFoodList('Lunch')}  />
-						<DiaryDetail Meal={'Dinner'} onAddPressButton={this.onAddPressButton} FoodList={this.buildFoodList('Dinner')} />	
-						<DiaryDetail Meal={'Snacks'} onAddPressButton={this.onAddPressButton} FoodList={this.buildFoodList('Snacks')} />					
+						<DiaryDetail Meal={'Breakfast'} onEditItemDiary ={onEditItemDiary}  onDeleteItemDiary={onDeleteItemDiary}  onAddPressButton={this.onAddPressButton} FoodList={this.buildFoodList('Breakfast')} />
+						<DiaryDetail Meal={'Lunch'}     onEditItemDiary ={onEditItemDiary}  onDeleteItemDiary={onDeleteItemDiary} onAddPressButton={this.onAddPressButton}  FoodList={this.buildFoodList('Lunch')}  />
+						<DiaryDetail Meal={'Dinner'}    onEditItemDiary ={onEditItemDiary}  onDeleteItemDiary={onDeleteItemDiary}  onAddPressButton={this.onAddPressButton} FoodList={this.buildFoodList('Dinner')} />	
+						<DiaryDetail Meal={'Snacks'}    onEditItemDiary ={onEditItemDiary}  onDeleteItemDiary={onDeleteItemDiary} onAddPressButton={this.onAddPressButton} FoodList={this.buildFoodList('Snacks')} />					
 					</View>
 				 </ScrollView>
 	)
