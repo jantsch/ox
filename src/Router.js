@@ -87,7 +87,9 @@ class RouterComponent extends Component{
 							<Scene 
 								key="SocialLogin"
 								component={SocialLogin}								
-								hideNavBar={true} 												
+								hideNavBar={false} 
+								navigationBarStyle={{marginTop:20}}	
+								title="Sign Up"											
 							/>		
 							<Scene 
 								key="ProfileQuestion"
@@ -104,7 +106,7 @@ class RouterComponent extends Component{
 							    title="Search" 
 							    icon={TabView} 							  	
 	           				>
-		                       <Scene key="SearchScreen"  title="OxalatesApp"  
+		                       <Scene key="SearchScreen"  title="Oxalate Tracker"  
 		                       			initial 
 		                       			component={Search} 
 		                       			onRight={ ()=> {Actions.FiltersScreen()} }		           						 	
@@ -113,7 +115,7 @@ class RouterComponent extends Component{
 		           				/>
 		           			   <Scene key="FiltersScreen"    title="Filters" component={FiltersScreen}/>
 		           			   <Scene key="FilterSelection"    getTitle={this.props.title} component={FilterSelection}/>
-		           			  <Scene key="ItemScreen"    title="Add Food" component={Item}
+		           			   <Scene key="ItemScreen"    title="Add Food" component={Item}
 			                       	  onRight={ ()=> {
 			                       		  		this.props.itemCart.dmSetViaButton ? 
 			                       		  		(
@@ -140,7 +142,7 @@ class RouterComponent extends Component{
 								    title="Diary" 
 								    icon={TabView} 									    			  
 								   >
-							      <Scene key="DiaryScreen"  title="OxalatesApp"  component={Diary}/>
+							      <Scene key="DiaryScreen"  title="Oxalate Tracker"  component={Diary}/>
 							       <Scene key="EditItemScreen"    title="Edit Food" component={Item}
 			                       	  onRight={ ()=> {Actions.SelectMealScreenEdit()}}
 			                       		rightButtonIconStyle=	{rightImageStyle} 
@@ -173,7 +175,6 @@ const styles ={
      
         },
      navBar: {
-     	flex: 0.5,
    		  backgroundColor: '#fff',
    		  borderBottomWidth: 1 ,
    		  borderColor: 'grey'

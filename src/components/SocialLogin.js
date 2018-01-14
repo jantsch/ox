@@ -1,10 +1,9 @@
 import React, {Component} from 'react'
-import { SocialIcon } from 'react-native-elements'
-import { View } from 'react-native'
+import { SocialIcon,Divider } from 'react-native-elements'
+import { View,Text } from 'react-native'
 import { 
 		Input,
-		Spinner,
-		DeafultUpperImage
+		Spinner
 		} from './common'
 import { loginWithProvider } from './../actions'
 import { Actions } from 'react-native-router-flux'
@@ -21,7 +20,8 @@ class SocialLogin extends Component{
 	renderButtons(){
 		const {	
 				socialBtnContainer,
-				containerSpinner
+				containerSpinner,
+				btnStyle
 			  } = styles
 		if(this.props.loading)
 		{	
@@ -30,22 +30,28 @@ class SocialLogin extends Component{
 		return (
 			<View style={socialBtnContainer}>
 					<SocialIcon
-					  title='Sign In With Facebook'
+					  title='Continue with Facebook'
 					  button
+					  light
+					  style={btnStyle}
 					  type='facebook'
 					  onPress={ ()=> this.onButtonPress('facebook') }  
 					  onLongPress={ ()=> this.onButtonPress('facebook')}
 					/>
 					<SocialIcon
-					  title='Sign In With Twitter'
+					  title='Continue with Twitter'
 					  button
 					  type='twitter'
+					  light
+					  style={btnStyle}
 					   onPress={ ()=> this.onButtonPress('twitter') } 
 					  onLongPress={ ()=> this.onButtonPress('twitter')}
 					/>
 					<SocialIcon
-					  title='Sign In With Google+'
+					  title='Continue with Google+'
 					  button
+					  light
+					  style={btnStyle}
 					  type='google-plus-official'
 					  onPress={ ()=> this.onButtonPress('google') } 
 					  onLongPress={ ()=> this.onButtonPress('google')}
@@ -57,14 +63,19 @@ class SocialLogin extends Component{
 	render(){
 		const {
 				containerStyle,	
-				containerSpinner
+				containerSpinner,
+				text,
+				dividerStyle
 			  } = styles	
 		
 		
 		return(
 			<View style={containerStyle}>
-				<DeafultUpperImage />
+				<Text  style={text} >Do you already have an account? You can use it to log in to Oxalates App.</Text>
+				<Divider style={dividerStyle} />
 				{this.renderButtons()}
+				<Divider style={dividerStyle} />
+				<Text  style={text} >We will never post anything without your permission.</Text>
 			</View>
 		)
 	}
@@ -73,16 +84,35 @@ class SocialLogin extends Component{
 const styles={
 	containerStyle:{
 		backgroundColor: '#fff',
-		flex: 1
+		flex: 1,
+		paddingTop: 70,
+		alignContent: 'center'  
 	},	
+	text:{
+		paddingTop: 20,
+		paddingRight: 20,
+		paddingLeft: 20,
+		textAlign: 'left' ,
+	},
+	dividerStyle:{
+		 backgroundColor: 'grey',
+		 marginTop: 15,
+		 marginLeft: 10,
+		 marginRight: 10 
+	},
+	btnStyle:{
+		height: 40,
+		borderRadius: 0
+	},
 	socialBtnContainer:{
-		justifyContent: 'space-around',
-		paddingBottom: 10
+		paddingTop: 10,
+		justifyContent: 'space-between',
+		
 	},	
 	containerSpinner:{
 		justifyContent: 'center',
 		alignItems: 'center',
-		flex:2
+		flex:4
 	}
 }
 

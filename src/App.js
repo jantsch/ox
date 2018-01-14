@@ -18,7 +18,7 @@ class App extends  Component{
 	  'diary',
 	  ['today']
 	);
-    const store = createStore(reducers,compose(applyMiddleware(ReduxThunk,logger),autoRehydrate()))
+    const store = createStore(reducers, compose(applyMiddleware(ReduxThunk,logger))) //,autoRehydrate() inside compose
     persistStore(store,{storage: AsyncStorage,  transforms: [saveSubsetBlacklistFilter]  })
     return (
       <Provider store={store}>
